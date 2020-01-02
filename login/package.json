@@ -1,0 +1,54 @@
+{
+  "main": "node_modules/expo/AppEntry.js",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web",
+    "eject": "expo eject",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "expo": "~36.0.0",
+    "expo-apple-authentication": "~2.0.0",
+    "expo-facebook": "~8.0.0",
+    "expo-google-app-auth": "^8.0.0",
+    "expo-linear-gradient": "~8.0.0",
+    "react": "~16.9.0",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-36.0.0.tar.gz",
+    "react-native-gesture-handler": "~1.5.0",
+    "react-native-reanimated": "~1.4.0",
+    "react-navigation": "^4.0.10",
+    "react-navigation-hooks": "^1.1.0",
+    "react-navigation-stack": "^1.10.3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.0.0",
+    "@typescript-eslint/eslint-plugin": "^2.14.0",
+    "@typescript-eslint/parser": "^2.14.0",
+    "babel-preset-expo": "~8.0.0",
+    "eslint": "^6.8.0",
+    "eslint-config-universe": "^2.1.0",
+    "eslint-plugin-react-native": "^3.8.1",
+    "prettier": "^1.19.1",
+    "typescript": "^3.7.4"
+  },
+  "private": true,
+  "eslintConfig": {
+    "plugins": [
+      "react-native"
+    ],
+    "extends": [
+      "universe/native",
+      "plugin:react-native/all"
+    ],
+    "rules": {
+      "react-native/no-unused-styles": 2,
+      "react-native/split-platform-components": 0,
+      "react-native/no-inline-styles": 0,
+      "react-native/no-color-literals": 0,
+      "react-native/no-raw-text": 2,
+      "react-native/no-single-element-style-arrays": 2
+    }
+  }
+}
