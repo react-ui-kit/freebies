@@ -1,4 +1,4 @@
-# freebies
+# React-UI-Kit.com freebies
 
 Free UI screens coded using React-Native
 
