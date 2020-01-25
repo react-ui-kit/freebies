@@ -9,6 +9,7 @@ import Sofia from './screens/Sofia';
 import Velvet from './screens/Velvet';
 import Gauri from './screens/Gauri';
 import Frida from './screens/Frida';
+import Firebase from './screens/Firebase';
 
 const App = () => {
   const navigation = useNavigation();
@@ -68,6 +69,16 @@ const App = () => {
             </Text>
           </View>
         </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.button, styles.firebase]}
+          onPress={() => navigation.navigate('Firebase')}>
+          <View>
+            <Text style={{ textAlign: 'center', color: '#FFF' }}>Firebase</Text>
+            <Text style={{ textAlign: 'center', color: '#FFF', fontSize: 11 }}>
+              login using email & password
+            </Text>
+          </View>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -86,6 +97,7 @@ const AppNavigator = createStackNavigator(
     Velvet,
     Gauri,
     Frida,
+    Firebase,
   },
   {
     initialRouteName: 'App',
@@ -130,5 +142,11 @@ const styles = StyleSheet.create({
   },
   velvet: {
     backgroundColor: '#F5B1F5',
+  },
+  firebase: {
+    backgroundColor: '#1A73E8',
+  },
+  apple: {
+    backgroundColor: '#000000',
   },
 });
