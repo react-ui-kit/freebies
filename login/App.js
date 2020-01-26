@@ -86,7 +86,7 @@ const App = () => {
             <View>
               <Text style={{ textAlign: 'center', color: '#FFF' }}>Apple</Text>
               <Text style={{ textAlign: 'center', color: '#FFF', fontSize: 11 }}>
-                login using email
+                login using your Apple ID
               </Text>
             </View>
           </TouchableOpacity>
