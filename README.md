@@ -23,3 +23,12 @@ Currently there are 4 login screens, with login functionalities for Facebook, Go
 ### 4. Frida: with Inputs + toggle password, login Button and a gradient Background for the screen
 
 <img src="https://user-images.githubusercontent.com/3584560/71660857-048c6000-2d55-11ea-985f-b4a866dc3652.png" width="50%" />
+
+### 5. Firebase: login using email & password
+
+<img src="https://user-images.githubusercontent.com/3584560/71660857-048c6000-2d55-11ea-985f-b4a866dc3652.png" width="50%" />
+
+### 6. Apple: login using your Apple ID
+
+<img src="https://user-images.githubusercontent.com/3584560/71660857-048c6000-2d55-11ea-985f-b4a866dc3652.png" width="50%" />
+
