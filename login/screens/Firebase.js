@@ -27,7 +27,7 @@ const SIZES = {
 };
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyCnOk2rHrhTYQuCNCeuWl8E2mteX2HaXTk',
+  apiKey: '___FIREBASE_API_KEY___',
 };
 
 export default class Sofia extends Component {
