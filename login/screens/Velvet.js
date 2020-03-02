@@ -1,4 +1,8 @@
-import React, { Component } from 'react';
+import { Ionicons, FontAwesome } from '@expo/vector-icons';
+import * as AppleAuthentication from 'expo-apple-authentication';
+import * as Facebook from 'expo-facebook';
+import * as Google from 'expo-google-app-auth';
+import React, { useState, useCallback } from 'react';
 import {
   Alert,
   Text,
@@ -9,10 +13,6 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
-import * as Facebook from 'expo-facebook';
-import * as Google from 'expo-google-app-auth';
-import * as AppleAuthentication from 'expo-apple-authentication';
-import { Ionicons, FontAwesome } from '@expo/vector-icons';
 
 const COLORS = {
   WHITE: '#FFF',
@@ -38,18 +38,12 @@ const GOOGLE_IOS_ID = '';
 const GOOGLE_ANDROID_ID = '';
 const API_URL = 'http://5e08ac18434a370014168b98.mockapi.io/api/v1';
 
-export default class Velvet extends Component {
-  static navigationOptions = {
-    header: null,
-  };
+export default () => {
+  const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState('contact@react-ui-kit.com');
+  const [password, setPassword] = useState('subscribe');
 
-  state = {
-    loading: false,
-    email: 'contact@react-ui-kit.com',
-    password: 'subscribe',
-  };
-
-  handleFacebook = async () => {
+  const handleFacebook = useCallback(async () => {
     try {
       await Facebook.initializeAsync(FACEBOOK_APP_ID);
       const { type, token } = await Facebook.logInWithReadPermissionsAsync({
@@ -66,9 +60,9 @@ export default class Velvet extends Component {
     } catch ({ message }) {
       alert(`Facebook Login Error: ${message}`);
     }
-  };
+  });
 
-  handleGoogle = async () => {
+  const handleGoogle = useCallback(async () => {
     try {
       const { type, accessToken, user } = await Google.logInAsync({
         iosClientId: GOOGLE_IOS_ID,
@@ -85,9 +79,9 @@ export default class Velvet extends Component {
     } catch ({ message }) {
       alert(`Google Login Error: ${message}`);
     }
-  };
+  });
 
-  handleApple = async () => {
+  const handleApple = useCallback(async () => {
     try {
       const credential = await AppleAuthentication.signInAsync({
         requestedScopes: [
@@ -105,11 +99,9 @@ export default class Velvet extends Component {
         alert('Apple Login error');
       }
     }
-  };
+  });
 
-  handleLogin = async () => {
-    const { email, password } = this.state;
-
+  const handleLogin = useCallback(async () => {
     fetch(`${API_URL}/login`, {
       method: 'POST',
       headers: {
@@ -124,35 +116,30 @@ export default class Velvet extends Component {
       .catch(error => {
         console.error('Login Error:', error);
       });
-  };
+  }, [email, password]);
 
-  handleAuth = async type => {
-    this.setState({ loading: true });
-
+  const handleAuth = useCallback(async type => {
+    setLoading(true);
     // implement login logic using type
     switch (type) {
       case 'google':
-        await this.handleGoogle();
+        await handleGoogle();
         break;
       case 'facebook':
-        await this.handleFacebook();
+        await handleFacebook();
         break;
       case 'apple':
-        await this.handleApple();
+        await handleApple();
         break;
       case 'password':
       default:
-        await this.handleLogin();
+        await handleLogin();
         break;
     }
+    setLoading(false);
+  });
 
-    // reset loading state
-    this.setState({ loading: false });
-  };
-
-  renderInputs() {
-    const { email, password } = this.state;
-
+  const renderInputs = () => {
     return (
       <View>
         <View style={styles.inputContainer}>
@@ -167,7 +154,7 @@ export default class Velvet extends Component {
               value={email}
               placeholder="you@email.com"
               placeholderTextColor={COLORS.BLACK}
-              onChangeText={value => this.setState({ email: value })}
+              onChangeText={value => setEmail(value)}
             />
           </View>
         </View>
@@ -183,54 +170,53 @@ export default class Velvet extends Component {
               secureTextEntry
               value={password}
               placeholderTextColor={COLORS.BLACK}
-              onChangeText={value => this.setState({ password: value })}
+              onChangeText={value => setPassword(value)}
             />
           </View>
         </View>
         <Text style={styles.divider}>or</Text>
-        {this.renderActions()}
+        {renderActions()}
       </View>
     );
-  }
+  };
 
-  renderSocials() {
+  const renderSocials = () => {
     return (
       <View style={styles.social}>
         <TouchableOpacity
           activeOpacity={0.8}
           style={[styles.button, styles.socialButton, styles.facebook]}
-          onPress={() => this.handleAuth('facebook')}>
+          onPress={() => handleAuth('facebook')}>
           <FontAwesome size={18} name="facebook" color={COLORS.WHITE} />
         </TouchableOpacity>
 
         <TouchableOpacity
           activeOpacity={0.8}
           style={[styles.button, styles.socialButton, styles.google]}
-          onPress={() => this.handleAuth('google')}>
+          onPress={() => handleAuth('google')}>
           <FontAwesome name="google" size={18} color={COLORS.WHITE} />
         </TouchableOpacity>
 
         <AppleAuthentication.AppleAuthenticationButton
           cornerRadius={SIZES.BASE * 4}
-          onPress={() => this.handleAuth('apple')}
+          onPress={() => handleAuth('apple')}
           style={[styles.button, styles.socialButton]}
           buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
           buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
         />
       </View>
     );
-  }
+  };
 
-  renderActions() {
-    const { email, password, loading } = this.state;
+  const renderActions = () => {
     const isValid = email && password;
     return (
       <>
-        {this.renderSocials()}
+        {renderSocials()}
         <TouchableOpacity
           disabled={!isValid}
           style={[styles.button, styles.signin]}
-          onPress={() => this.handleAuth('password')}>
+          onPress={() => handleAuth('password')}>
           {loading ? (
             <ActivityIndicator size={SIZES.FONT * 1.4} color={COLORS.WHITE} />
           ) : (
@@ -247,21 +233,19 @@ export default class Velvet extends Component {
         </TouchableOpacity>
       </>
     );
-  }
+  };
 
-  render() {
-    return (
-      <ImageBackground
-        source={require('../assets/background.jpeg')}
-        style={{ width: '100%', height: '100%' }}>
-        <View style={styles.container}>
-          <Text style={[styles.title, { textAlign: 'center' }]}>Login</Text>
-          {this.renderInputs()}
-        </View>
-      </ImageBackground>
-    );
-  }
-}
+  return (
+    <ImageBackground
+      source={require('../assets/background.jpeg')}
+      style={{ width: '100%', height: '100%' }}>
+      <View style={styles.container}>
+        <Text style={[styles.title, { textAlign: 'center' }]}>Login</Text>
+        {renderInputs()}
+      </View>
+    </ImageBackground>
+  );
+};
 
 const styles = StyleSheet.create({
   button: {

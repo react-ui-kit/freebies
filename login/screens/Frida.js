@@ -1,4 +1,6 @@
-import React, { Component } from 'react';
+import { Feather } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import React, { useState, useCallback } from 'react';
 import {
   Text,
   TextInput,
@@ -9,8 +11,6 @@ import {
   ActivityIndicator,
   KeyboardAvoidingView,
 } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import { Feather } from '@expo/vector-icons';
 
 const COLORS = {
   WHITE: '#FFF',
@@ -29,21 +29,14 @@ const SIZES = {
 const API_URL = 'http://5e08ac18434a370014168b98.mockapi.io/api/v1';
 const timeout = ms => new Promise(response => setTimeout(response, ms));
 
-export default class Frida extends Component {
-  static navigationOptions = {
-    header: null,
-  };
+export default () => {
+  const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState('contact@react-ui-kit.com');
+  const [password, setPassword] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
 
-  state = {
-    loading: false,
-    showPassword: false,
-    email: 'contact@react-ui-kit.com',
-    password: null,
-  };
-
-  handleLogin = async () => {
-    const { email, password } = this.state;
-    this.setState({ loading: true });
+  const handleLogin = useCallback(async () => {
+    setLoading(true);
 
     await timeout(2000);
     fetch(`${API_URL}/login`, {
@@ -60,16 +53,10 @@ export default class Frida extends Component {
       })
       .catch(error => alert(`Login error: ${error}`));
 
-    this.setState({ loading: false });
-  };
+    setLoading(false);
+  });
 
-  handleToggle() {
-    this.setState(state => ({ showPassword: !state.showPassword }));
-  }
-
-  renderInputs() {
-    const { email, password, loading } = this.state;
-
+  const renderInputs = () => {
     return (
       <View style={{ flex: 1 }}>
         <View style={styles.inputContainer}>
@@ -79,7 +66,7 @@ export default class Frida extends Component {
             style={styles.input}
             selectionColor={COLORS.WHITE}
             placeholderTextColor={COLORS.WHITE}
-            onChangeText={value => this.setState({ email: value })}
+            onChangeText={value => setEmail(value)}
           />
         </View>
         <View style={styles.inputContainer}>
@@ -89,8 +76,8 @@ export default class Frida extends Component {
             placeholder="Password"
             selectionColor={COLORS.WHITE}
             placeholderTextColor={COLORS.WHITE}
-            secureTextEntry={!this.state.showPassword}
-            onChangeText={value => this.setState({ password: value })}
+            secureTextEntry={!showPassword}
+            onChangeText={value => setPassword(value)}
           />
           <TouchableOpacity
             style={{
@@ -98,11 +85,11 @@ export default class Frida extends Component {
               top: SIZES.BASE,
               position: 'absolute',
             }}
-            onPress={() => this.handleToggle()}>
+            onPress={() => setShowPassword(!showPassword)}>
             <Feather
               color={COLORS.WHITE}
               size={SIZES.FONT * 1.3}
-              name={!this.state.showPassword ? 'eye' : 'eye-off'}
+              name={!showPassword ? 'eye' : 'eye-off'}
             />
           </TouchableOpacity>
         </View>
@@ -118,10 +105,7 @@ export default class Frida extends Component {
             Forgot your password?
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          activeOpacity={0.8}
-          style={styles.signin}
-          onPress={() => this.handleLogin()}>
+        <TouchableOpacity activeOpacity={0.8} style={styles.signin} onPress={() => handleLogin()}>
           {loading ? (
             <ActivityIndicator size={SIZES.FONT * 1.2} color={COLORS.PURPLE} />
           ) : (
@@ -130,27 +114,25 @@ export default class Frida extends Component {
         </TouchableOpacity>
       </View>
     );
-  }
+  };
 
-  render() {
-    return (
-      <LinearGradient
-        style={{ flex: 1 }}
-        end={{ x: 1, y: 0.7 }}
-        start={{ x: 0, y: 0 }}
-        colors={[COLORS.BLUE, COLORS.PURPLE]}>
-        <SafeAreaView style={{ flex: 1 }}>
-          <KeyboardAvoidingView style={styles.container}>
-            <View style={{ flex: 0.5, justifyContent: 'center' }}>
-              <Text style={styles.title}>Sign in</Text>
-            </View>
-            {this.renderInputs()}
-          </KeyboardAvoidingView>
-        </SafeAreaView>
-      </LinearGradient>
-    );
-  }
-}
+  return (
+    <LinearGradient
+      style={{ flex: 1 }}
+      end={{ x: 1, y: 0.7 }}
+      start={{ x: 0, y: 0 }}
+      colors={[COLORS.BLUE, COLORS.PURPLE]}>
+      <SafeAreaView style={{ flex: 1 }}>
+        <KeyboardAvoidingView style={styles.container}>
+          <View style={{ flex: 0.5, justifyContent: 'center' }}>
+            <Text style={styles.title}>Sign in</Text>
+          </View>
+          {renderInputs()}
+        </KeyboardAvoidingView>
+      </SafeAreaView>
+    </LinearGradient>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {

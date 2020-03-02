@@ -4,9 +4,9 @@ Free UI screens coded using React-Native
 
 ## Login
 
-Currently there are 4 login screens, with login functionalities for Facebook, Google, Apple and backend API example and for screen navigation we used react-navigation package.
+Currently there are 6 login screens, with login functionalities for Facebook, Google, Apple and backend API example and for screen navigation we used [react-navigation v5](https://reactnavigation.org/docs/getting-started) package with the latest [React Hooks](https://reactjs.org/docs/hooks-intro.html)
 
-<img src="https://user-images.githubusercontent.com/3584560/71660863-0524f680-2d55-11ea-94cb-37050e0a919d.png" width="50%" />
+<img src="https://user-images.githubusercontent.com/3584560/75666964-731b6a80-5c7f-11ea-8b5b-a7263c1d7d9d.png" width="50%" />
 
 ### 1. Velvet: with Inputs + icons, social & login Buttons and a Background image for the screen
 
@@ -25,7 +25,9 @@ Currently there are 4 login screens, with login functionalities for Facebook, Go
 <img src="https://user-images.githubusercontent.com/3584560/71660857-048c6000-2d55-11ea-985f-b4a866dc3652.png" width="50%" />
 
 ### 5. Firebase: login using email & password
+
 <img src="https://user-images.githubusercontent.com/3584560/73131972-0f1cdb00-401d-11ea-8082-77cac3dfacc2.png" width="50%" />
 
 ### 6. Apple: login using your Apple ID
+
 <img src="https://user-images.githubusercontent.com/3584560/73131980-180dac80-401d-11ea-9121-05117cd8fce6.png" width="50%" />

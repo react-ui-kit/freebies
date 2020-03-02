@@ -9,6 +9,9 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@react-native-community/masked-view": "0.1.5",
+    "@react-navigation/native": "^5.0.8",
+    "@react-navigation/stack": "^5.1.0",
     "expo": "~36.0.0",
     "expo-apple-authentication": "~2.0.0",
     "expo-facebook": "~8.0.0",
@@ -19,9 +22,8 @@
     "react-native": "https://github.com/expo/react-native/archive/sdk-36.0.0.tar.gz",
     "react-native-gesture-handler": "~1.5.0",
     "react-native-reanimated": "~1.4.0",
-    "react-navigation": "^4.0.10",
-    "react-navigation-hooks": "^1.1.0",
-    "react-navigation-stack": "^1.10.3"
+    "react-native-safe-area-context": "0.6.0",
+    "react-native-screens": "2.0.0-alpha.12"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",

@@ -1,4 +1,8 @@
-import React, { Component } from 'react';
+import { FontAwesome } from '@expo/vector-icons';
+import * as Facebook from 'expo-facebook';
+import * as Google from 'expo-google-app-auth';
+import { LinearGradient } from 'expo-linear-gradient';
+import React, { useState, useCallback } from 'react';
 import {
   Alert,
   Text,
@@ -9,10 +13,6 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
-import * as Facebook from 'expo-facebook';
-import * as Google from 'expo-google-app-auth';
-import { LinearGradient } from 'expo-linear-gradient';
-import { FontAwesome } from '@expo/vector-icons';
 
 const COLORS = {
   WHITE: '#FFF',
@@ -40,18 +40,12 @@ const GOOGLE_IOS_ID = '';
 const GOOGLE_ANDROID_ID = '';
 const API_URL = 'http://5e08ac18434a370014168b98.mockapi.io/api/v1';
 
-export default class Gauri extends Component {
-  static navigationOptions = {
-    header: null,
-  };
+export default () => {
+  const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState('contact@react-ui-kit.com');
+  const [password, setPassword] = useState(null);
 
-  state = {
-    loading: false,
-    email: 'contact@react-ui-kit.com',
-    password: null,
-  };
-
-  handleFacebook = async () => {
+  const handleFacebook = useCallback(async () => {
     try {
       await Facebook.initializeAsync(FACEBOOK_APP_ID);
       const { type, token } = await Facebook.logInWithReadPermissionsAsync({
@@ -67,9 +61,9 @@ export default class Gauri extends Component {
     } catch ({ message }) {
       alert(`Facebook Login Error: ${message}`);
     }
-  };
+  });
 
-  handleGoogle = async () => {
+  const handleGoogle = useCallback(async () => {
     try {
       const { type, accessToken, user } = await Google.logInAsync({
         iosClientId: GOOGLE_IOS_ID,
@@ -86,11 +80,9 @@ export default class Gauri extends Component {
     } catch ({ message }) {
       alert(`Google Login Error: ${message}`);
     }
-  };
+  });
 
-  handleLogin = async () => {
-    const { email, password } = this.state;
-
+  const handleLogin = useCallback(async () => {
     fetch(`${API_URL}/login`, {
       method: 'POST',
       headers: {
@@ -105,31 +97,30 @@ export default class Gauri extends Component {
       .catch(error => {
         console.error('Login Error:', error);
       });
-  };
+  });
 
-  handleAuth = async type => {
-    this.setState({ loading: true });
+  const handleAuth = useCallback(async type => {
+    setLoading(true);
 
     // implement login logic using type
     switch (type) {
       case 'google':
-        await this.handleGoogle();
+        await handleGoogle();
         break;
       case 'facebook':
-        await this.handleFacebook();
+        await handleFacebook();
         break;
       case 'password':
       default:
-        await this.handleLogin();
+        await handleLogin();
         break;
     }
 
     // reset loading state
-    this.setState({ loading: false });
-  };
+    setLoading(false);
+  });
 
-  renderInputs() {
-    const { email, password, loading } = this.state;
+  const renderInputs = () => {
     const isValid = email && password;
 
     return (
@@ -141,7 +132,7 @@ export default class Gauri extends Component {
             style={styles.input}
             placeholder="you@email.com"
             placeholderTextColor={COLORS.DARK_GREY}
-            onChangeText={value => this.setState({ email: value })}
+            onChangeText={value => setEmail(value)}
           />
         </View>
         <View style={styles.inputContainer}>
@@ -151,7 +142,7 @@ export default class Gauri extends Component {
             value={password}
             style={styles.input}
             placeholderTextColor={COLORS.DARK_GREY}
-            onChangeText={value => this.setState({ password: value })}
+            onChangeText={value => setPassword(value)}
           />
         </View>
         <TouchableOpacity>
@@ -160,7 +151,7 @@ export default class Gauri extends Component {
         <TouchableOpacity
           disabled={!isValid}
           style={{ marginTop: SIZES.PADDING * 1.5 }}
-          onPress={() => this.handleAuth('password')}>
+          onPress={() => handleAuth('password')}>
           <LinearGradient
             style={[styles.button, styles.signin]}
             colors={isValid ? [COLORS.ORANGE, COLORS.RED] : [COLORS.GREY, COLORS.DARK_GREY]}
@@ -183,15 +174,15 @@ export default class Gauri extends Component {
         </TouchableOpacity>
       </>
     );
-  }
+  };
 
-  renderSocials() {
+  const renderSocials = () => {
     return (
       <View style={styles.social}>
         <TouchableOpacity
           activeOpacity={0.8}
           style={[styles.button, styles.google]}
-          onPress={() => this.handleAuth('google')}>
+          onPress={() => handleAuth('google')}>
           <View style={{ flexDirection: 'row' }}>
             <FontAwesome name="google" size={18} color={COLORS.WHITE} />
             <Text style={styles.socialLabel}>Google</Text>
@@ -200,7 +191,7 @@ export default class Gauri extends Component {
         <TouchableOpacity
           activeOpacity={0.8}
           style={[styles.button, styles.facebook]}
-          onPress={() => this.handleAuth('facebook')}>
+          onPress={() => handleAuth('facebook')}>
           <View style={{ flexDirection: 'row' }}>
             <FontAwesome size={18} name="facebook-square" color={COLORS.WHITE} />
             <Text style={styles.socialLabel}>Facebook</Text>
@@ -208,50 +199,48 @@ export default class Gauri extends Component {
         </TouchableOpacity>
       </View>
     );
-  }
+  };
 
-  render() {
-    return (
-      <SafeAreaView style={{ flex: 1 }}>
-        <View style={styles.container}>
-          <View style={{ marginBottom: 18 }}>
-            <Text style={styles.title}>Sign in</Text>
-            <Text style={styles.subtitle}>Please sign in to get full access</Text>
-          </View>
-          <View style={{ flex: 2 }}>
-            {this.renderInputs()}
-            <View style={{ alignItems: 'center' }}>
-              <View style={styles.divider}>
-                <Text style={styles.dividerLabel}>or</Text>
-              </View>
+  return (
+    <SafeAreaView style={{ flex: 1 }}>
+      <View style={styles.container}>
+        <View style={{ marginBottom: 18 }}>
+          <Text style={styles.title}>Sign in</Text>
+          <Text style={styles.subtitle}>Please sign in to get full access</Text>
+        </View>
+        <View style={{ flex: 2 }}>
+          {renderInputs()}
+          <View style={{ alignItems: 'center' }}>
+            <View style={styles.divider}>
+              <Text style={styles.dividerLabel}>or</Text>
             </View>
-            {this.renderSocials()}
           </View>
-          <View style={{ flex: 0.25, alignItems: 'center' }}>
+          {renderSocials()}
+        </View>
+        <View style={{ flex: 0.25, alignItems: 'center' }}>
+          <Text
+            style={{
+              fontSize: SIZES.FONT,
+              color: COLORS.GREY,
+              marginBottom: SIZES.BASE,
+            }}>
+            Don't have an account?
+          </Text>
+          <TouchableOpacity onPress={() => alert('Go to Signup screen')}>
             <Text
               style={{
                 fontSize: SIZES.FONT,
-                color: COLORS.GREY,
-                marginBottom: SIZES.BASE,
+                fontWeight: '600',
+                color: COLORS.BLUE,
               }}>
-              Don't have an account?
+              Sign up
             </Text>
-            <TouchableOpacity onPress={() => alert('Go to Signup screen')}>
-              <Text
-                style={{
-                  fontSize: SIZES.FONT,
-                  fontWeight: '600',
-                  color: COLORS.BLUE,
-                }}>
-                Sign up
-              </Text>
-            </TouchableOpacity>
-          </View>
+          </TouchableOpacity>
         </View>
-      </SafeAreaView>
-    );
-  }
-}
+      </View>
+    </SafeAreaView>
+  );
+};
 
 const styles = StyleSheet.create({
   button: {

@@ -1,4 +1,8 @@
-import React, { Component } from 'react';
+import { FontAwesome } from '@expo/vector-icons';
+import * as Facebook from 'expo-facebook';
+import * as Google from 'expo-google-app-auth';
+import { LinearGradient } from 'expo-linear-gradient';
+import React, { useState, useCallback } from 'react';
 import {
   Alert,
   Text,
@@ -8,10 +12,6 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
-import * as Facebook from 'expo-facebook';
-import * as Google from 'expo-google-app-auth';
-import { LinearGradient } from 'expo-linear-gradient';
-import { FontAwesome } from '@expo/vector-icons';
 
 const COLORS = {
   WHITE: '#FAFAFA',
@@ -43,18 +43,12 @@ const GOOGLE_IOS_ID = '';
 const GOOGLE_ANDROID_ID = '';
 const API_URL = 'http://5e08ac18434a370014168b98.mockapi.io/api/v1';
 
-export default class Sofia extends Component {
-  static navigationOptions = {
-    header: null,
-  };
+export default () => {
+  const [loading, setLoading] = useState(false);
+  const [username, setUsername] = useState('react-ui-kit');
+  const [password, setPassword] = useState('subscribe');
 
-  state = {
-    loading: false,
-    username: 'react-ui-kit',
-    password: 'subscribe',
-  };
-
-  handleFacebook = async () => {
+  const handleFacebook = useCallback(async () => {
     try {
       await Facebook.initializeAsync(FACEBOOK_APP_ID);
       const { type, token } = await Facebook.logInWithReadPermissionsAsync({
@@ -70,9 +64,9 @@ export default class Sofia extends Component {
     } catch ({ message }) {
       alert(`Facebook Login Error: ${message}`);
     }
-  };
+  });
 
-  handleGoogle = async () => {
+  const handleGoogle = useCallback(async () => {
     try {
       const { type, accessToken, user } = await Google.logInAsync({
         iosClientId: GOOGLE_IOS_ID,
@@ -89,11 +83,9 @@ export default class Sofia extends Component {
     } catch ({ message }) {
       alert(`Google Login Error: ${message}`);
     }
-  };
+  });
 
-  handleLogin = async () => {
-    const { username, password } = this.state;
-
+  const handleLogin = useCallback(async () => {
     fetch(`${API_URL}/login`, {
       method: 'POST',
       headers: {
@@ -108,31 +100,30 @@ export default class Sofia extends Component {
       .catch(error => {
         console.error('Login Error:', error);
       });
-  };
+  }, [username, password]);
 
-  handleAuth = async type => {
-    this.setState({ loading: true });
+  const handleAuth = useCallback(async type => {
+    setLoading(true);
 
     // implement login logic using type
     switch (type) {
       case 'google':
-        await this.handleGoogle();
+        await handleGoogle();
         break;
       case 'facebook':
-        await this.handleFacebook();
+        await handleFacebook();
         break;
       case 'password':
       default:
-        await this.handleLogin();
+        await handleLogin();
         break;
     }
 
     // reset loading state
-    this.setState({ loading: false });
-  };
+    setLoading(false);
+  });
 
-  renderInputs() {
-    const { username, password, loading } = this.state;
+  const renderInputs = () => {
     const isValid = username && password;
 
     return (
@@ -142,7 +133,7 @@ export default class Sofia extends Component {
           style={styles.input}
           placeholder="Username"
           placeholderTextColor={COLORS.WHITE}
-          onChangeText={value => this.setState({ username: value })}
+          onChangeText={value => setUsername(value)}
         />
         <TextInput
           secureTextEntry
@@ -150,12 +141,12 @@ export default class Sofia extends Component {
           style={styles.input}
           placeholder="Password"
           placeholderTextColor={COLORS.WHITE}
-          onChangeText={value => this.setState({ password: value })}
+          onChangeText={value => setPassword(value)}
         />
         <TouchableOpacity
           disabled={!isValid}
           style={[styles.button, styles.signin]}
-          onPress={() => this.handleAuth('password')}>
+          onPress={() => handleAuth('password')}>
           {loading ? (
             <ActivityIndicator size={SIZES.FONT * 1.4} color={COLORS.PURPLE2} />
           ) : (
@@ -164,15 +155,15 @@ export default class Sofia extends Component {
         </TouchableOpacity>
       </>
     );
-  }
+  };
 
-  renderSocials() {
+  const renderSocials = () => {
     return (
       <View style={styles.social}>
         <TouchableOpacity
           activeOpacity={0.8}
           style={[styles.button, styles.google]}
-          onPress={() => this.handleAuth('google')}>
+          onPress={() => handleAuth('google')}>
           <View style={{ flexDirection: 'row' }}>
             <FontAwesome size={18} name="google" color="rgba(255,255,255,0.5)" />
             <Text style={styles.socialLabel}>Login with Google</Text>
@@ -181,7 +172,7 @@ export default class Sofia extends Component {
         <TouchableOpacity
           activeOpacity={0.8}
           style={[styles.button, styles.facebook]}
-          onPress={() => this.handleAuth('facebook')}>
+          onPress={() => handleAuth('facebook')}>
           <View style={{ flexDirection: 'row' }}>
             <FontAwesome size={18} name="facebook-square" color="rgba(255,255,255,0.5)" />
             <Text style={styles.socialLabel}>Login with Facebook</Text>
@@ -189,46 +180,42 @@ export default class Sofia extends Component {
         </TouchableOpacity>
       </View>
     );
-  }
+  };
 
-  render() {
-    return (
-      <LinearGradient
-        style={{ flex: 1 }}
-        end={{ x: 0, y: 1 }}
-        start={{ x: 1, y: 0 }}
-        colors={COLORS.GRADIENT}>
-        <View style={styles.container}>
-          <View style={{ flex: 0.25, justifyContent: 'center' }}>
-            <Text style={styles.title}>Login</Text>
+  return (
+    <LinearGradient
+      style={{ flex: 1 }}
+      end={{ x: 0, y: 1 }}
+      start={{ x: 1, y: 0 }}
+      colors={COLORS.GRADIENT}>
+      <View style={styles.container}>
+        <View style={{ flex: 0.25, justifyContent: 'center' }}>
+          <Text style={styles.title}>Login</Text>
+        </View>
+        <View style={{ flex: 1 }}>
+          {renderInputs()}
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <View style={styles.divider} />
+            <Text style={styles.dividerLabel}>OR</Text>
+            <View style={styles.divider} />
           </View>
-          <View style={{ flex: 1 }}>
-            {this.renderInputs()}
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <View style={styles.divider} />
-              <Text style={styles.dividerLabel}>OR</Text>
-              <View style={styles.divider} />
-            </View>
-            {this.renderSocials()}
-            <View style={styles.footer}>
-              <Text style={styles.forgotLabel}>FORGOT PASSWORD?</Text>
-              <TouchableOpacity onPress={() => alert("Go to 'Forgot Password' screen")}>
-                <Text style={[styles.forgotLabel, { textDecorationLine: 'underline' }]}>
-                  RECOVER
-                </Text>
-              </TouchableOpacity>
-            </View>
+          {renderSocials()}
+          <View style={styles.footer}>
+            <Text style={styles.forgotLabel}>FORGOT PASSWORD?</Text>
+            <TouchableOpacity onPress={() => alert("Go to 'Forgot Password' screen")}>
+              <Text style={[styles.forgotLabel, { textDecorationLine: 'underline' }]}>RECOVER</Text>
+            </TouchableOpacity>
           </View>
         </View>
-      </LinearGradient>
-    );
-  }
-}
+      </View>
+    </LinearGradient>
+  );
+};
 
 const styles = StyleSheet.create({
   button: {
