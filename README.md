@@ -4,7 +4,7 @@ Free UI screens coded using React-Native
 
 ## Login
 
-Currently there are 6 login screens, with login functionalities for Facebook, Google, Apple and backend API example and for screen navigation we used react-navigation v5 package.
+Currently there are 6 login screens, with login functionalities for Facebook, Google, Apple and backend API example and for screen navigation we used [react-navigation v5](https://reactnavigation.org/docs/getting-started) package with the latest [React Hooks](https://reactjs.org/docs/hooks-intro.html)
 
 <img src="https://user-images.githubusercontent.com/3584560/75666964-731b6a80-5c7f-11ea-8b5b-a7263c1d7d9d.png" width="50%" />
 
