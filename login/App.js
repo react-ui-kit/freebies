@@ -1,7 +1,15 @@
-import React from 'react';
-import { StyleSheet, ScrollView, TouchableOpacity, Text, View } from 'react-native';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import React from 'react';
+import { StyleSheet, ScrollView, TouchableOpacity, Text, View } from 'react-native';
+
+// screens
+import Apple from './screens/Apple';
+import Firebase from './screens/Firebase';
+import Frida from './screens/Frida';
+import Gauri from './screens/Gauri';
+import Sofia from './screens/Sofia';
+import Velvet from './screens/Velvet';
 
 const appTheme = {
   ...DefaultTheme,
@@ -12,14 +20,6 @@ const appTheme = {
 };
 
 const Stack = createStackNavigator();
-
-// screens
-import Sofia from './screens/Sofia';
-import Velvet from './screens/Velvet';
-import Gauri from './screens/Gauri';
-import Frida from './screens/Frida';
-import Firebase from './screens/Firebase';
-import Apple from './screens/Apple';
 
 const App = ({ navigation }) => {
   return (
@@ -121,6 +121,9 @@ export default () => {
 };
 
 const styles = StyleSheet.create({
+  apple: {
+    backgroundColor: '#000000',
+  },
   button: {
     alignItems: 'center',
     borderRadius: 4,
@@ -134,6 +137,9 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-evenly',
     paddingHorizontal: 24,
+  },
+  firebase: {
+    backgroundColor: '#1A73E8',
   },
   frida: {
     backgroundColor: '#6636D8',
@@ -153,11 +159,5 @@ const styles = StyleSheet.create({
   },
   velvet: {
     backgroundColor: '#F5B1F5',
-  },
-  firebase: {
-    backgroundColor: '#1A73E8',
-  },
-  apple: {
-    backgroundColor: '#000000',
   },
 });

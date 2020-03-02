@@ -1,6 +1,6 @@
+import * as firebase from 'firebase';
 import React, { useState, useEffect, useCallback } from 'react';
 import {
-  Alert,
   Text,
   TextInput,
   StyleSheet,
@@ -9,7 +9,6 @@ import {
   ActivityIndicator,
   ScrollView,
 } from 'react-native';
-import * as firebase from 'firebase';
 
 const COLORS = {
   WHITE: '#FAFAFA',
@@ -143,17 +142,17 @@ export default () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    padding: SIZES.PADDING * 2,
-    backgroundColor: COLORS.BLUE,
-  },
   button: {
     alignItems: 'center',
     borderRadius: SIZES.BASE,
     justifyContent: 'center',
     padding: SIZES.PADDING / 0.83,
+  },
+  container: {
+    backgroundColor: COLORS.BLUE,
+    flex: 1,
+    justifyContent: 'center',
+    padding: SIZES.PADDING * 2,
   },
   input: {
     borderBottomColor: COLORS.WHITE,
@@ -183,17 +182,17 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     letterSpacing: 0.5,
   },
+  text: {
+    color: COLORS.WHITE,
+    fontSize: SIZES.FONT,
+    textAlign: 'center',
+  },
   title: {
     color: COLORS.WHITE,
     fontSize: SIZES.TITLE,
     fontWeight: '600',
     letterSpacing: 1,
     marginBottom: SIZES.BASE,
-    textAlign: 'center',
-  },
-  text: {
-    color: COLORS.WHITE,
-    fontSize: SIZES.FONT,
     textAlign: 'center',
   },
 });

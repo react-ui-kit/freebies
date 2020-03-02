@@ -1,3 +1,7 @@
+import { Ionicons, FontAwesome } from '@expo/vector-icons';
+import * as AppleAuthentication from 'expo-apple-authentication';
+import * as Facebook from 'expo-facebook';
+import * as Google from 'expo-google-app-auth';
 import React, { useState, useCallback } from 'react';
 import {
   Alert,
@@ -9,10 +13,6 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
-import * as Facebook from 'expo-facebook';
-import * as Google from 'expo-google-app-auth';
-import * as AppleAuthentication from 'expo-apple-authentication';
-import { Ionicons, FontAwesome } from '@expo/vector-icons';
 
 const COLORS = {
   WHITE: '#FFF',

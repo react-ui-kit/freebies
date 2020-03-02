@@ -1,3 +1,5 @@
+import { Feather } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 import React, { useState, useCallback } from 'react';
 import {
   Text,
@@ -9,8 +11,6 @@ import {
   ActivityIndicator,
   KeyboardAvoidingView,
 } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import { Feather } from '@expo/vector-icons';
 
 const COLORS = {
   WHITE: '#FFF',

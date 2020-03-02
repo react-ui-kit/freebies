@@ -1,6 +1,6 @@
-import React, { useState, useCallback } from 'react';
-import { Text, StyleSheet, View, TouchableOpacity } from 'react-native';
 import * as AppleAuthentication from 'expo-apple-authentication';
+import React, { useState, useCallback } from 'react';
+import { Text, StyleSheet, View } from 'react-native';
 
 const COLORS = {
   WHITE: '#FAFAFA',
@@ -94,13 +94,15 @@ export default () => {
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: COLORS.WHITE,
     flex: 1,
     justifyContent: 'center',
     padding: SIZES.PADDING * 2,
-    backgroundColor: COLORS.WHITE,
   },
-  button: {
-    backgroundColor: COLORS.BLACK,
+  text: {
+    color: COLORS.BLACK,
+    fontSize: SIZES.FONT,
+    textAlign: 'center',
   },
   title: {
     color: COLORS.BLACK,
@@ -108,11 +110,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     letterSpacing: 1,
     marginBottom: SIZES.BASE,
-    textAlign: 'center',
-  },
-  text: {
-    color: COLORS.BLACK,
-    fontSize: SIZES.FONT,
     textAlign: 'center',
   },
 });

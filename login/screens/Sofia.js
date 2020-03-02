@@ -1,3 +1,7 @@
+import { FontAwesome } from '@expo/vector-icons';
+import * as Facebook from 'expo-facebook';
+import * as Google from 'expo-google-app-auth';
+import { LinearGradient } from 'expo-linear-gradient';
 import React, { useState, useCallback } from 'react';
 import {
   Alert,
@@ -8,10 +12,6 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
-import * as Facebook from 'expo-facebook';
-import * as Google from 'expo-google-app-auth';
-import { LinearGradient } from 'expo-linear-gradient';
-import { FontAwesome } from '@expo/vector-icons';
 
 const COLORS = {
   WHITE: '#FAFAFA',

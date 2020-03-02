@@ -1,3 +1,7 @@
+import { FontAwesome } from '@expo/vector-icons';
+import * as Facebook from 'expo-facebook';
+import * as Google from 'expo-google-app-auth';
+import { LinearGradient } from 'expo-linear-gradient';
 import React, { useState, useCallback } from 'react';
 import {
   Alert,
@@ -9,10 +13,6 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
-import * as Facebook from 'expo-facebook';
-import * as Google from 'expo-google-app-auth';
-import { LinearGradient } from 'expo-linear-gradient';
-import { FontAwesome } from '@expo/vector-icons';
 
 const COLORS = {
   WHITE: '#FFF',
@@ -243,16 +243,16 @@ export default () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingHorizontal: SIZES.PADDING,
-    paddingVertical: SIZES.PADDING * 2,
-  },
   button: {
     alignItems: 'center',
     borderRadius: SIZES.BASE,
     justifyContent: 'center',
     padding: SIZES.PADDING / 0.83,
+  },
+  container: {
+    flex: 1,
+    paddingHorizontal: SIZES.PADDING,
+    paddingVertical: SIZES.PADDING * 2,
   },
   divider: {
     alignItems: 'center',
