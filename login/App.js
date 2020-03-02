@@ -1,8 +1,17 @@
 import React from 'react';
 import { StyleSheet, ScrollView, TouchableOpacity, Text, View } from 'react-native';
-import { useNavigation } from 'react-navigation-hooks';
-import { createAppContainer } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
+import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+
+const appTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    background: 'white',
+  },
+};
+
+const Stack = createStackNavigator();
 
 // screens
 import Sofia from './screens/Sofia';
@@ -12,8 +21,7 @@ import Frida from './screens/Frida';
 import Firebase from './screens/Firebase';
 import Apple from './screens/Apple';
 
-const App = () => {
-  const navigation = useNavigation();
+const App = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View>
@@ -96,31 +104,21 @@ const App = () => {
   );
 };
 
-const AppNavigator = createStackNavigator(
-  {
-    App: {
-      screen: App,
-      navigationOptions: () => ({
-        header: null,
-        headerBackTitle: null,
-      }),
-    },
-    Sofia,
-    Velvet,
-    Gauri,
-    Frida,
-    Firebase,
-    Apple,
-  },
-  {
-    initialRouteName: 'App',
-    defaultNavigationOptions: {
-      headerTintColor: '#FFF',
-    },
-  }
-);
-
-export default createAppContainer(AppNavigator);
+export default () => {
+  return (
+    <NavigationContainer theme={appTheme}>
+      <Stack.Navigator screenOptions={{ header: () => null }}>
+        <Stack.Screen name="App" component={App} />
+        <Stack.Screen name="Sofia" component={Sofia} />
+        <Stack.Screen name="Velvet" component={Velvet} />
+        <Stack.Screen name="Gauri" component={Gauri} />
+        <Stack.Screen name="Frida" component={Frida} />
+        <Stack.Screen name="Firebase" component={Firebase} />
+        <Stack.Screen name="Apple" component={Apple} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+};
 
 const styles = StyleSheet.create({
   button: {
@@ -135,7 +133,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     flex: 1,
     justifyContent: 'space-evenly',
-    marginHorizontal: 24,
+    paddingHorizontal: 24,
   },
   frida: {
     backgroundColor: '#6636D8',

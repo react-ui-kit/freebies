@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Text, StyleSheet, View, TouchableOpacity } from 'react-native';
 import * as AppleAuthentication from 'expo-apple-authentication';
 
@@ -18,17 +18,10 @@ const SIZES = {
   PADDING: 12,
 };
 
-export default class Sofia extends Component {
-  static navigationOptions = {
-    header: null,
-  };
+export default () => {
+  const [user, setUser] = useState(null);
 
-  state = {
-    loading: false,
-    user: null,
-  };
-
-  handleLogin = async () => {
+  const handleLogin = useCallback(async () => {
     try {
       const user = await AppleAuthentication.signInAsync({
         requestedScopes: [
@@ -38,7 +31,7 @@ export default class Sofia extends Component {
       });
       // signed in
       console.log('user', user);
-      this.setState({ user });
+      setUser(user);
     } catch (e) {
       if (e.code === 'ERR_CANCELED') {
         // handle that the user canceled the sign-in flow
@@ -46,12 +39,12 @@ export default class Sofia extends Component {
         // handle other errors
       }
     }
-  };
+  });
 
-  handleLogout = async () => {
+  const handleLogout = useCallback(async () => {
     try {
-      await AppleAuthentication.signOutAsync({ user: this.state.user });
-      this.setState({ user: null });
+      await AppleAuthentication.signOutAsync({ user });
+      setUser(null);
     } catch (e) {
       console.log('handleLogout error:', e);
       if (e.code === 'ERR_CANCELED') {
@@ -60,22 +53,20 @@ export default class Sofia extends Component {
         // handle other errors
       }
     }
-  };
+  });
 
-  renderLogin() {
+  const renderLogin = () => {
     return (
       <AppleAuthentication.AppleAuthenticationButton
         style={{ height: 44 }}
-        onPress={() => this.handleLogin()}
+        onPress={() => handleLogin()}
         buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
         buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
       />
     );
-  }
+  };
 
-  renderUser() {
-    const { user } = this.state;
-
+  const renderUser = () => {
     if (!user) return null;
 
     return (
@@ -83,27 +74,23 @@ export default class Sofia extends Component {
         <Text style={styles.text}>Hey, {user.email}</Text>
         <AppleAuthentication.AppleAuthenticationButton
           style={{ height: 44 }}
-          onPress={() => this.handleLogout()}
+          onPress={() => handleLogout()}
           buttonType={AppleAuthentication.AppleAuthenticationButtonType.CONTINUE}
           buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
         />
       </View>
     );
-  }
+  };
 
-  render() {
-    const { user } = this.state;
-
-    return (
-      <View style={styles.container}>
-        <Text style={styles.title}>Apple</Text>
-        <Text style={[styles.text, { marginBottom: SIZES.FONT }]}>Sign in using your Apple ID</Text>
-        {user && this.renderUser()}
-        {!user && this.renderLogin()}
-      </View>
-    );
-  }
-}
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Apple</Text>
+      <Text style={[styles.text, { marginBottom: SIZES.FONT }]}>Sign in using your Apple ID</Text>
+      {user && renderUser()}
+      {!user && renderLogin()}
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {

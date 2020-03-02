@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Alert,
   Text,
@@ -7,6 +7,7 @@ import {
   View,
   TouchableOpacity,
   ActivityIndicator,
+  ScrollView,
 } from 'react-native';
 import * as firebase from 'firebase';
 
@@ -30,69 +31,60 @@ const firebaseConfig = {
   apiKey: '___FIREBASE_API_KEY___',
 };
 
-export default class Sofia extends Component {
-  static navigationOptions = {
-    header: null,
-  };
+export default () => {
+  const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState('contact@react-ui-kit.com');
+  const [password, setPassword] = useState('subscribe');
+  const [user, setUser] = useState(null);
 
-  state = {
-    loading: false,
-    user: null,
-    email: 'contact@react-ui-kit.com',
-    password: 'subscribe',
-  };
-
-  componentDidMount() {
+  useEffect(() => {
     if (!firebase.apps.length) {
       firebase.initializeApp(firebaseConfig);
-      this.checkAuth();
+      checkAuth();
     }
-  }
+  }, [firebase]);
 
-  checkAuth = () => {
+  const checkAuth = useCallback(() => {
     // Listen for authentication state to change.
     firebase.auth().onAuthStateChanged(user => {
       if (user != null) {
-        this.setState({ user });
+        setUser(user);
       }
-      this.setState({ loading: false });
+      setLoading(false);
     });
-  };
+  }, [firebase]);
 
-  handleLogin = () => {
-    const { email, password } = this.state;
-
+  const handleLogin = useCallback(() => {
     // Sign in with credential from the Facebook user.
     firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
       .catch(error => {
         // reset loading state
-        this.setState({ loading: false });
+        setLoading(false);
         alert(error.message);
       });
-  };
+  }, [firebase]);
 
-  handleLogout = () => {
+  const handleLogout = useCallback(() => {
     firebase
       .auth()
       .signOut()
       .then(() => {
-        this.setState({ user: null });
+        setUser(null);
       })
       .catch(error => {
         alert(error.message);
-        this.setState({ user: null });
+        setUser(null);
       });
-  };
+  });
 
-  handleAuth = () => {
-    this.setState({ loading: true });
-    this.handleLogin();
-  };
+  const handleAuth = useCallback(() => {
+    setLoading(true);
+    handleLogin();
+  });
 
-  renderInputs() {
-    const { email, password, loading } = this.state;
+  const renderInputs = () => {
     const isValid = email && password;
 
     return (
@@ -101,21 +93,23 @@ export default class Sofia extends Component {
           value={email}
           style={styles.input}
           placeholder="email"
+          selectionColor={COLORS.WHITE}
           placeholderTextColor={COLORS.WHITE}
-          onChangeText={value => this.setState({ email: value })}
+          onChangeText={value => setEmail(value)}
         />
         <TextInput
           secureTextEntry
           value={password}
           style={styles.input}
           placeholder="Password"
+          selectionColor={COLORS.WHITE}
           placeholderTextColor={COLORS.WHITE}
-          onChangeText={value => this.setState({ password: value })}
+          onChangeText={value => setPassword(value)}
         />
         <TouchableOpacity
           disabled={!isValid}
           style={[styles.button, styles.signin]}
-          onPress={() => this.handleAuth('password')}>
+          onPress={() => handleAuth('password')}>
           {loading ? (
             <ActivityIndicator size={SIZES.FONT * 1.4} color={COLORS.BLUE} />
           ) : (
@@ -124,37 +118,29 @@ export default class Sofia extends Component {
         </TouchableOpacity>
       </>
     );
-  }
+  };
 
-  renderUser() {
-    const { user } = this.state;
-
+  const renderUser = () => {
     if (!user) return null;
 
     return (
       <View>
         <Text style={styles.text}>Hey, {user.email}</Text>
-        <TouchableOpacity
-          style={[styles.button, styles.signin]}
-          onPress={() => this.handleLogout()}>
+        <TouchableOpacity style={[styles.button, styles.signin]} onPress={() => handleLogout()}>
           <Text style={styles.signinLabel}>Logout</Text>
         </TouchableOpacity>
       </View>
     );
-  }
+  };
 
-  render() {
-    const { user } = this.state;
-
-    return (
-      <View style={styles.container}>
-        <Text style={styles.title}>Firebase</Text>
-        {user && this.renderUser()}
-        {!user && this.renderInputs()}
-      </View>
-    );
-  }
-}
+  return (
+    <ScrollView contentContainerStyle={styles.container}>
+      <Text style={styles.title}>Firebase</Text>
+      {user && renderUser()}
+      {!user && renderInputs()}
+    </ScrollView>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
