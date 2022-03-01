@@ -160,7 +160,7 @@ export default () => {
         </View>
         <View style={styles.inputContainer}>
           <Ionicons
-            name="md-lock"
+            name="md-lock-closed"
             color={COLORS.PRIMARY}
             size={SIZES.FONT * 1.8}
             style={[styles.inputIcon, styles.passwordIcon]}

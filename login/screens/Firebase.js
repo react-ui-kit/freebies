@@ -1,4 +1,3 @@
-import * as firebase from 'firebase';
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   Text,
@@ -9,6 +8,9 @@ import {
   ActivityIndicator,
   ScrollView,
 } from 'react-native';
+
+import * as firebase from 'firebase/app';
+import { onAuthStateChanged, signInWithEmailAndPassword, signOut, getAuth } from 'firebase/auth';
 
 const COLORS = {
   WHITE: '#FAFAFA',
@@ -37,15 +39,17 @@ export default () => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    if (!firebase.apps.length) {
+    if (!firebase.getApps().length) {
       firebase.initializeApp(firebaseConfig);
       checkAuth();
     }
   }, [firebase]);
 
   const checkAuth = useCallback(() => {
+    const firebaseApp = firebase.getApp();
+    const auth = getAuth(firebaseApp);
     // Listen for authentication state to change.
-    firebase.auth().onAuthStateChanged(user => {
+    onAuthStateChanged(auth, (user) => {
       if (user != null) {
         setUser(user);
       }
@@ -55,24 +59,19 @@ export default () => {
 
   const handleLogin = useCallback(() => {
     // Sign in with credential from the Facebook user.
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(email, password)
-      .catch(error => {
-        // reset loading state
-        setLoading(false);
-        alert(error.message);
-      });
+    signInWithEmailAndPassword(email, password).catch((error) => {
+      // reset loading state
+      setLoading(false);
+      alert(error.message);
+    });
   }, [firebase]);
 
   const handleLogout = useCallback(() => {
-    firebase
-      .auth()
-      .signOut()
+    signOut()
       .then(() => {
         setUser(null);
       })
-      .catch(error => {
+      .catch((error) => {
         alert(error.message);
         setUser(null);
       });
@@ -94,7 +93,7 @@ export default () => {
           placeholder="email"
           selectionColor={COLORS.WHITE}
           placeholderTextColor={COLORS.WHITE}
-          onChangeText={value => setEmail(value)}
+          onChangeText={(value) => setEmail(value)}
         />
         <TextInput
           secureTextEntry
@@ -103,7 +102,7 @@ export default () => {
           placeholder="Password"
           selectionColor={COLORS.WHITE}
           placeholderTextColor={COLORS.WHITE}
-          onChangeText={value => setPassword(value)}
+          onChangeText={(value) => setPassword(value)}
         />
         <TouchableOpacity
           disabled={!isValid}
